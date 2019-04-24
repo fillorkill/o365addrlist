@@ -47,6 +47,6 @@ if route_t.lower() == 'y':
 
 print "o365.conf		-	dnsmasq conf file"
 print "o365_mikrotik.rsc	-	mikrotik address list"
-print "route.sh			-	route bash file"
+print "route.sh		-	route bash file"
 print "Done."
 
