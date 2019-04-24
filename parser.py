@@ -1,7 +1,9 @@
 import sys,json,urllib,uuid,getopt;
 
 dns = raw_input("Local DNS IPv4 Address: ")
+local_gw = raw_input("Local Gateway IPv4 Address: ")
 mikrotik = raw_input("Generate Mikrotik Address List? (Y/N): ")
+iptables = raw_input("Generate iptables? (Y/N): ")
 
 url = 'https://endpoints.office.com/endpoints/Worldwide?ClientRequestId='+str(uuid.uuid1())
 print 'Fetching endpoints....'
@@ -33,11 +35,18 @@ with open('o365.conf','w') as f:
 	for url in urls:
 		f.write("\nserver=/"+url+"/"+dns)
 if mikrotik.lower() == 'y':
+	print "Writing mikrotik...."
 	with open('o365_mikrotik.rsc','w') as f:
 		for ip in ips:
 			f.write("\n/ip firewall address-list add address=%s list=o365" % ip)
+if iptables.lower() == 'y':
+	print "Writing iptables...."
+	with open('iptables.sh', 'w') as f:
+		for ip in ips:
+			f.write("\nroute add "+ip+" gw "+local_gw)
 
 print "o365.conf		-	dnsmasq conf file"
 print "o365_mikrotik.rsc	-	mikrotik address list"
+print "iptables.sh		-	iptables bash file"
 print "Done."
 
